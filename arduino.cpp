@@ -179,5 +179,5 @@ void loop() {
   }
 }
 
-//Ahi ta todo maso menos explicado todo lo que hace cada cosa
+//Ahi ta todo maso menos explicado todo lo que hace cada cosa, probalo y supuestamente ahi te dejaria pasar los char a string como queres
 
