@@ -170,14 +170,7 @@ void setup() {
 void loop() {
   if (digitalRead(disparo) == LOW) { // Checkea si la funcion de 'disparo' boton/input esta activo
     digitalWrite(leddisparo, HIGH); // enciende el 'disparo' LED
-    sendMessage(phoneNumber1, apiKey1, "Disparo de Alarma !!!!!!"); // manda el primer mensaje 
-    delay(5000); // un delay de 5 segundos
-    sendMessage(phoneNumber2, apiKey2, "Disparo de Alarma !!!!!!"); // segundo mensaje
-    delay(180000); // el parametro de 'disparo' asi no rompe los quinotos
-  } else {
+   {
     digitalWrite(leddisparo, LOW); // apaga el led de 'disparo' si el boton/input no se activa
   }
-}
-
-//Ahi ta todo maso menos explicado todo lo que hace cada cosa, probalo si funciona ;-B
-
+{
