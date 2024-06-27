@@ -6,10 +6,10 @@
 #include <WiFiClient.h>
 
 // Constantes y variables
-const int TRIGGER_PIN = 0;      // Pin para iniciar el portal de configuración
-const int ledwifi = 12;         // Pin del LED indicador de conexión WiFi
-const int leddisparo = 13;      // Pin del LED indicador de disparo
-const int disparo = 4;          // Pin de entrada para el disparo
+const int TRIGGER_PIN = 0;      
+const int ledwifi = 12;         
+const int leddisparo = 13;      
+const int disparo = 4;          
 
 char telefono1[15] = "";        // Variable para almacenar el número de teléfono 1
 char apikey1[10] = "";          // Variable para almacenar la API Key 1
@@ -78,7 +78,7 @@ void setup() {
     saveConfig();
   }
 
-  // Imprimir información de conexión WiFi
+  // Información de conexión WiFi
   Serial.println("Conectado al WiFi:");
   Serial.println(WiFi.localIP());
   digitalWrite(ledwifi, HIGH);  // Encender LED indicador de conexión WiFi
@@ -229,7 +229,7 @@ void checkAndResetConfigPortal() {
       delay(5000);
     }
 
-    Serial.println("Conectado... OK :)");  // Imprimir mensaje de conexión exitosa
+    Serial.println("Conectado... OK :)");  // Mensaje de conexión
     WiFi.begin();  // Intentar conectar WiFi nuevamente
     while (WiFi.status() != WL_CONNECTED) {
       delay(500);
