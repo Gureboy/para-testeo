@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos IoT</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 20px; }
+        .container { max-width: 900px; }
+        .card { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Sistema de Gestión de Datos IoT</h1>
+            <p class="lead">Gestione y visualice los datos enviados desde sus dispositivos IoT.</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Últimos Datos Recibidos</h5>
+            </div>
+            <div class="card-body">
+                <ul id="datos-list" class="list-group">
+                    <!-- Los datos se agregarán aquí dinámicamente -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Enviar Datos al Servidor Principal</h5>
+            </div>
+            <div class="card-body">
+                <button id="enviar-datos-btn" class="btn btn-primary">Enviar Datos</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
+    <script>
+        $(document).ready(function() {
+            var socket = io();
+
+            socket.on('nuevos_datos', function(data) {
+                $('#datos-list').prepend('<li class="list-group-item">' + JSON.stringify(data.datos) + '</li>');
+            });
+
+            $('#enviar-datos-btn').click(function() {
+                $.get('/enviar_datos', function(response) {
+                    alert(response.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
