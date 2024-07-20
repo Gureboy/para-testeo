@@ -62,3 +62,4 @@ void loop() {
   // Espera antes de enviar la siguiente lectura
   delay(60000); // Envía datos cada minuto
 }
+
