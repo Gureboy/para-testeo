@@ -1,6 +1,7 @@
-#define BLYNK_TEMPLATE_ID "YourTemplateID"
-#define BLYNK_DEVICE_NAME "YourDeviceName"
-#define BLYNK_AUTH_TOKEN "YourAuthToken"
+
+#define BLYNK_TEMPLATE_ID "PoneelID"
+#define BLYNK_DEVICE_NAME "Nombre_dispositivo"
+#define BLYNK_AUTH_TOKEN "APIKEY"
 
 #include <BlynkSimpleEsp8266.h>
 #include <RCSwitch.h>
@@ -12,8 +13,8 @@ int LEDGSM = 3;      // LED para estado GSM
 int SIRENA = A0;
 int PGM = 5;
 
-// Configuración para múltiples zonas
-const int numZonas = 2; // Número de zonas (puedes aumentar este número para más zonas)
+// Configuracion para múltiples zonas
+const int numZonas = 2; // Numero de zonas (podes aumentar este numero para mas zonas)
 int Zonas[] = {9, 10};  // Pines de las zonas (Z1, Z2, etc.)
 int LEDs[] = {4, 6};    // Pines de los LEDs correspondientes a cada zona (LEDZ1, LEDZ2, etc.)
 
@@ -24,7 +25,7 @@ unsigned long periodosonando = 120000;
 unsigned long tiempoahora = 0;
 int estadosirena = LOW;
 
-// Token de autenticación de Blynk
+// Token de autenticacion de blynk
 char auth[] = BLYNK_AUTH_TOKEN;
 
 void setup() {
@@ -32,15 +33,15 @@ void setup() {
   SIM800L.begin(9600);
   Blynk.begin(auth, "SSID", "Password");
 
-  // Inicialización de RCSwitch
+  // Inicia  RCSwitch
   mySwitch.enableReceive(0);  // Receptor en pin #2
   
-  // Configuración de pines
+  // Configuracion de pines
   pinMode(LEDGSM, OUTPUT);
   pinMode(SIRENA, OUTPUT);
   pinMode(PGM, OUTPUT);
 
-  // Configuración de pines para cada zona
+  // Configuracion de pines para cada zona
   for (int i = 0; i < numZonas; i++) {
     pinMode(Zonas[i], INPUT);
     pinMode(LEDs[i], OUTPUT);
@@ -48,7 +49,7 @@ void setup() {
 }
 
 void loop() {
-  Blynk.run();  // Ejecuta Blynk para mantener la conexión
+  Blynk.run();  // Abrir blynk para mantener la conexión
 
   controlarSirena();
 
@@ -59,7 +60,7 @@ void loop() {
   manejarAlarma();
 }
 
-// Función para controlar la sirena
+// Funcion para controlar la sirena
 void controlarSirena() {
   if (estadosirena == HIGH) {
     digitalWrite(SIRENA, HIGH);
@@ -72,7 +73,7 @@ void controlarSirena() {
   }
 }
 
-// Función para leer el estado de las zonas
+// Funcion para leer el estado de las zonas
 void leerZonas() {
   for (int i = 0; i < numZonas; i++) {
     estadosZonas[i] = digitalRead(Zonas[i]);
@@ -84,7 +85,7 @@ void leerZonas() {
   }
 }
 
-// Función para leer el control remoto
+// Funcion para leer el control remoto
 void leerControlRemoto() {
   if (mySwitch.available()) {
     long int value = mySwitch.getReceivedValue();
@@ -104,7 +105,7 @@ void leerControlRemoto() {
   }
 }
 
-// Función para manejar la activación de la alarma
+// Función para manejar la activacion de la alarma
 void manejarAlarma() {
   for (int i = 0; i < numZonas; i++) {
     if (estadosZonas[i] && activada) {
