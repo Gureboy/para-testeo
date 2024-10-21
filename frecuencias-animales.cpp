@@ -83,13 +83,25 @@ void setup() {
 
 void loop() {
   unsigned long tiempoInicio = 0;
-unsigned long duracion = 60000; // 1 minuto
+unsigned long duracion = 30000; // 30 segundos (puedes ajustar esto)
+
+bool frecuenciaActiva = false;
 
 void loop() {
-  if (millis() - tiempoInicio > duracion) {
-    detenerFrecuencia();
+  // Verifica si hay una frecuencia activa
+  if (frecuenciaActiva && (millis() - tiempoInicio > duracion)) {
+    detenerFrecuencia();  // Detiene la frecuencia después del tiempo especificado
+    frecuenciaActiva = false;  // Marca que no hay frecuencias activas
+    Serial.println("Frecuencia desactivada automáticamente después de 30 segundos.");
   }
 }
+
+void activarFrecuencia(int frecuencia) {
+  tone(audioPin, frecuencia);
+  tiempoInicio = millis();  // Reinicia el temporizador
+  frecuenciaActiva = true;  // Marca que hay una frecuencia activa
+}
+
 
 }
 
