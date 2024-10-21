@@ -82,7 +82,15 @@ void setup() {
 }
 
 void loop() {
-  // Aquí puedes implementar cualquier lógica adicional
+  unsigned long tiempoInicio = 0;
+unsigned long duracion = 60000; // 1 minuto
+
+void loop() {
+  if (millis() - tiempoInicio > duracion) {
+    detenerFrecuencia();
+  }
+}
+
 }
 
 // HTML para la página web
