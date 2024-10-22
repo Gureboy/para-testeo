@@ -2,8 +2,7 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 
-const int audioPin = D1;  // Salida de audio en el pin D1 (GPIO5)
-
+const int audioPin = A0;  
 ESP8266WebServer server(80);
 
 // Variables para gestionar el tiempo de la frecuencia
