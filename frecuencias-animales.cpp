@@ -1,108 +1,26 @@
 #include <ESP8266WiFi.h>
-#include <ESPAsyncWebServer.h>
-#include <WiFiManager.h> 
+#include <ESP8266WebServer.h>
+#include <WiFiManager.h>
 
-const int audioPin = A0;  // Salida de audio en el pin A0
+const int audioPin = D1;  // Salida de audio en el pin D1 (GPIO5)
 
-AsyncWebServer server(80);
+ESP8266WebServer server(80);
 
-// Frecuencias para cada animal/plaga
-void activarFrecuencia(int frecuencia) {
-  tone(audioPin, frecuencia);
-}
-
-void detenerFrecuencia() {
-  noTone(audioPin);
-}
-
-void setup() {
-  Serial.begin(115200);
-  pinMode(audioPin, OUTPUT);
-  
-  // WiFiManager para configurar WiFi
-  WiFiManager wifiManager;
-  wifiManager.autoConnect("ControlPlagas");
-
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/html", index_html);
-  });
-
-  // Rutas para cada animal/plaga
-  server.on("/mosquitos", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(20000);  // Mosquitos: 20 kHz
-    request->send(200, "text/plain", "Frecuencia de mosquitos activada");
-  });
-
-  server.on("/palomas", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(25000);  // Palomas: 25 kHz
-    request->send(200, "text/plain", "Frecuencia de palomas activada");
-  });
-
-  server.on("/polillas", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(30000);  // Polillas: 30 kHz
-    request->send(200, "text/plain", "Frecuencia de polillas activada");
-  });
-
-  server.on("/gatos", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(18000);  // Gatos: 18 kHz
-    request->send(200, "text/plain", "Frecuencia de gatos activada");
-  });
-
-  server.on("/perros", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(16000);  // Perros: 16 kHz
-    request->send(200, "text/plain", "Frecuencia de perros activada");
-  });
-
-  server.on("/moscas", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(22000);  // Moscas: 22 kHz
-    request->send(200, "text/plain", "Frecuencia de moscas activada");
-  });
-
-  server.on("/cucarachas", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(35000);  // Cucarachas: 35 kHz
-    request->send(200, "text/plain", "Frecuencia de cucarachas activada");
-  });
-
-  server.on("/murcielagos", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(50000);  // Murciélagos: 50 kHz
-    request->send(200, "text/plain", "Frecuencia de murciélagos activada");
-  });
-
-  server.on("/ratones", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(45000);  // Ratones: 45 kHz
-    request->send(200, "text/plain", "Frecuencia de ratones activada");
-  });
-
-  server.on("/pulgas", HTTP_GET, [](AsyncWebServerRequest *request){
-    activarFrecuencia(40000);  // Pulgas: 40 kHz
-    request->send(200, "text/plain", "Frecuencia de pulgas activada");
-  });
-
-  server.begin();
-}
-
-void loop() {
-  unsigned long tiempoInicio = 0;
+// Variables para gestionar el tiempo de la frecuencia
+unsigned long tiempoInicio = 0;
 unsigned long duracion = 30000; // 30 segundos (puedes ajustar esto)
-
 bool frecuenciaActiva = false;
 
-void loop() {
-  // Verifica si hay una frecuencia activa
-  if (frecuenciaActiva && (millis() - tiempoInicio > duracion)) {
-    detenerFrecuencia();  // Detiene la frecuencia después del tiempo especificado
-    frecuenciaActiva = false;  // Marca que no hay frecuencias activas
-    Serial.println("Frecuencia desactivada automáticamente después de 30 segundos.");
-  }
-}
-
+// Frecuencias para cada animal/plaga
 void activarFrecuencia(int frecuencia) {
   tone(audioPin, frecuencia);
   tiempoInicio = millis();  // Reinicia el temporizador
   frecuenciaActiva = true;  // Marca que hay una frecuencia activa
 }
 
-
+void detenerFrecuencia() {
+  noTone(audioPin);
+  frecuenciaActiva = false;  // Marca que no hay frecuencias activas
 }
 
 // HTML para la página web
@@ -248,3 +166,79 @@ const char index_html[] PROGMEM = R"rawliteral(
 </body>
 </html>
 )rawliteral";
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(audioPin, OUTPUT);
+
+  // WiFiManager para configurar WiFi
+  WiFiManager wifiManager;
+  wifiManager.autoConnect("ControlPlagas");
+
+  server.on("/", [](){
+    server.send_P(200, "text/html", index_html);
+  });
+
+  // Rutas para cada animal/plaga
+  server.on("/mosquitos", [](){
+    activarFrecuencia(10000);  // Mosquitos: 10 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de mosquitos activada");
+  });
+
+  server.on("/palomas", [](){
+    activarFrecuencia(8000);  // Palomas: 8 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de palomas activada");
+  });
+
+  server.on("/polillas", [](){
+    activarFrecuencia(9000);  // Polillas: 9 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de polillas activada");
+  });
+
+  server.on("/gatos", [](){
+    activarFrecuencia(7000);  // Gatos: 7 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de gatos activada");
+  });
+
+  server.on("/perros", [](){
+    activarFrecuencia(6000);  // Perros: 6 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de perros activada");
+  });
+
+  server.on("/moscas", [](){
+    activarFrecuencia(8500);  // Moscas: 8.5 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de moscas activada");
+  });
+
+  server.on("/cucarachas", [](){
+    activarFrecuencia(9500);  // Cucarachas: 9.5 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de cucarachas activada");
+  });
+
+  server.on("/murcielagos", [](){
+    activarFrecuencia(10000);  // Murciélagos: 10 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de murciélagos activada");
+  });
+
+  server.on("/ratones", [](){
+    activarFrecuencia(9000);  // Ratones: 9 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de ratones activada");
+  });
+
+  server.on("/pulgas", [](){
+    activarFrecuencia(8000);  // Pulgas: 8 kHz (ajustado)
+    server.send(200, "text/plain", "Frecuencia de pulgas activada");
+  });
+
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+
+  // Verifica si hay una frecuencia activa
+  if (frecuenciaActiva && (millis() - tiempoInicio > duracion)) {
+    detenerFrecuencia();  // Detiene la frecuencia después del tiempo especificado
+    Serial.println("Frecuencia desactivada automáticamente después de 30 segundos.");
+  }
+}
