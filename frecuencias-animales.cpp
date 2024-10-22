@@ -7,7 +7,7 @@ ESP8266WebServer server(80);
 
 // Variables para gestionar el tiempo de la frecuencia
 unsigned long tiempoInicio = 0;
-unsigned long duracion = 30000; // 30 segundos (puedes ajustar esto)
+unsigned long duracion = 30000; // 30 segundos 
 bool frecuenciaActiva = false;
 
 // Frecuencias para cada animal/plaga
