@@ -58,31 +58,6 @@ const char index_html[] PROGMEM = R"rawliteral(
     .btn:hover {
       background-color: #0056b3;
     }
-    .slider {
-      appearance: none;
-      width: 60px;
-      height: 34px;
-      background: #ccc;
-      border-radius: 34px;
-      position: relative;
-      outline: none;
-      transition: background 0.2s;
-    }
-    .slider:before {
-      content: '';
-      position: absolute;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: white;
-      transition: transform 0.2s;
-    }
-    .slider:checked {
-      background: #4caf50;
-    }
-    .slider:checked:before {
-      transform: translateX(26px);
-    }
   </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -166,14 +141,28 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
+// Callback para lanzar la página web tras la conexión
+void openWebPageCallback() {
+  delay(1000);
+  Serial.println("Abriendo página web...");
+  WiFiClient client;
+  client.connect(WiFi.gatewayIP(), 80);  // Conectar al gateway
+  if (client.connected()) {
+    client.print(String("GET / HTTP/1.1\r\nHost: ") + WiFi.localIP().toString() + "\r\nConnection: close\r\n\r\n");
+    client.stop();
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   pinMode(audioPin, OUTPUT);
 
   // WiFiManager para configurar WiFi
   WiFiManager wifiManager;
+  wifiManager.setSaveConfigCallback(openWebPageCallback);  // Callback para abrir la página después de la conexión
   wifiManager.autoConnect("ControlPlagas");
 
+  // Configuración del servidor web
   server.on("/", [](){
     server.send_P(200, "text/html", index_html);
   });
