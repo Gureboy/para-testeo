@@ -2,7 +2,7 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 
-const int audioPin = A0;  
+const int audioPin = 5;  // Cambiado a GPIO 5
 ESP8266WebServer server(80);
 
 // Variables para gestionar el tiempo de la frecuencia
@@ -219,6 +219,16 @@ void setup() {
   });
 
   server.begin();
+  Serial.println("Servidor iniciado.");
+}
+
+void loop() {
+  server.handleClient();
+  
+  // Verificar si ha pasado el tiempo y detener la frecuencia
+  if (frecuenciaActiva && millis() - tiempoInicio >= duracion) {
+    detenerFrecuencia();
+  }
 }
 
 void loop() {
