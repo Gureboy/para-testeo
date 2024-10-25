@@ -3,7 +3,7 @@
 #include <WiFiManager.h>
 #include <Ticker.h>
 
-const int audioPin = 13;  // Cambia el gpio5
+const int audioPin = 13;  // Pin para el tono
 ESP8266WebServer server(80);
 Ticker frecuenciaTicker;
 
@@ -150,97 +150,100 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-// Callback para lanzar la página web tras la conexión
+// Función para abrir la página web en la conexión WiFi
 void openWebPageCallback() {
-    delay(1000);
     Serial.println("Abriendo página web...");
-    WiFiClient client;
-    client.connect(WiFi.gatewayIP(), 80);  // Conectar al gateway
-    if (client.connected()) {
-        client.print(String("GET / HTTP/1.1\r\nHost: ") + WiFi.localIP().toString() + "\r\nConnection: close\r\n\r\n");
-        client.stop();
-    }
+    // Solo esperamos un momento para la estabilidad
+    delay(1000);
+    // Aquí podrías usar otro método si quieres abrir la página web automáticamente
 }
 
-void setup() {
-    Serial.begin(115200);
-    pinMode(audioPin, OUTPUT);
-
-    // WiFiManager para configurar WiFi
-    WiFiManager wifiManager;
-    wifiManager.setSaveConfigCallback(openWebPageCallback);  // Callback para abrir la página después de la conexión
-    wifiManager.autoConnect("ControlPlagas");
-
-    // Configuración del servidor web
-    server.on("/", [](){
+// Configuración del servidor web
+void setupServer() {
+    server.on("/", []() {
         server.send_P(200, "text/html", index_html);
     });
 
-    // Rutas para cada animal/plaga con 8.3 segundos de alternancia
-    server.on("/mosquitos", [](){
+    // Rutas para cada animal/plaga
+    server.on("/mosquitos", []() {
         activarFrecuencia(10000);  // Mosquitos: 10 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de mosquitos activada");
     });
 
-    server.on("/palomas", [](){
-        activarFrecuencia(8);  // Palomas: 8 kHz
+    server.on("/palomas", []() {
+        activarFrecuencia(8000);  // Palomas: 8 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de palomas activada");
     });
 
-    server.on("/polillas", [](){
+    server.on("/polillas", []() {
         activarFrecuencia(9000);  // Polillas: 9 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de polillas activada");
     });
 
-    server.on("/gatos", [](){
+    server.on("/gatos", []() {
         activarFrecuencia(7000);  // Gatos: 7 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de gatos activada");
     });
 
-    server.on("/perros", [](){
+    server.on("/perros", []() {
         activarFrecuencia(6000);  // Perros: 6 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de perros activada");
     });
 
-    server.on("/moscas", [](){
+    server.on("/moscas", []() {
         activarFrecuencia(8500);  // Moscas: 8.5 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de moscas activada");
     });
 
-    server.on("/cucarachas", [](){
+    server.on("/cucarachas", []() {
         activarFrecuencia(9500);  // Cucarachas: 9.5 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de cucarachas activada");
     });
 
-    server.on("/murcielagos", [](){
-        activarFrecuencia(10000);  // Murciélagos: 10 kHz
+    server.on("/murcielagos", []() {
+        activarFrecuencia(11000);  // Murciélagos: 11 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de murciélagos activada");
     });
 
-    server.on("/ratones", [](){
-        activarFrecuencia(11000);  // Ratones: 11 kHz
+    server.on("/ratones", []() {
+        activarFrecuencia(12000);  // Ratones: 12 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de ratones activada");
     });
 
-    server.on("/pulgas", [](){
-        activarFrecuencia(12000);  // Pulgas: 12 kHz
+    server.on("/pulgas", []() {
+        activarFrecuencia(13000);  // Pulgas: 13 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de pulgas activada");
     });
 
     server.begin();
-    Serial.println("Servidor HTTP iniciado");
+    Serial.println("Servidor web iniciado en la IP: " + WiFi.localIP().toString());
+}
+
+void setup() {
+    Serial.begin(115200);
+
+    // Conectar a la red WiFi
+    WiFiManager wifiManager;
+    wifiManager.autoConnect("ControldePlaga");
+
+    // Configura la IP fija
+    WiFi.softAPConfig(IPAddress(192, 168, 10, 164), IPAddress(192, 168, 10, 1), IPAddress(255, 255, 255, 0));
+    WiFi.softAP("ControldePlaga", "");
+
+    openWebPageCallback();  // Llama a la función de apertura de página
+    setupServer();  // Configura el servidor
 }
 
 void loop() {
-    server.handleClient();
+    server.handleClient();  // Maneja las peticiones del cliente
 }
