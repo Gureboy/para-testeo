@@ -22,12 +22,12 @@ void detenerFrecuencia() {
     frecuenciaActiva = false;  // Marca que no hay frecuencias activas
 }
 
-// Función de parpadeo de frecuencia
+// Función para alternar encendido/apagado cada 8.3 segundos
 void manejarFrecuencia() {
     if (frecuenciaActiva) {
-        detenerFrecuencia();  // Detiene la frecuencia si está activa
-        delay(1500);          // Espera 1.5 segundos
-        activarFrecuencia(frecuenciaActual); // Reactiva la frecuencia
+        detenerFrecuencia();  // Apaga la frecuencia
+    } else {
+        activarFrecuencia(frecuenciaActual);  // Enciende la frecuencia
     }
 }
 
@@ -176,72 +176,71 @@ void setup() {
         server.send_P(200, "text/html", index_html);
     });
 
-    // Rutas para cada animal/plaga
+    // Rutas para cada animal/plaga con 8.3 segundos de alternancia
     server.on("/mosquitos", [](){
-        activarFrecuencia(10000);  // Mosquitos: 10 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(10000);  // Mosquitos: 10 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de mosquitos activada");
     });
 
     server.on("/palomas", [](){
-        activarFrecuencia(8);  // Palomas: 8 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(8);  // Palomas: 8 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de palomas activada");
     });
 
     server.on("/polillas", [](){
-        activarFrecuencia(15);  // Polillas: 9 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(9000);  // Polillas: 9 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de polillas activada");
     });
 
     server.on("/gatos", [](){
-        activarFrecuencia(7000);  // Gatos: 7 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(7000);  // Gatos: 7 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de gatos activada");
     });
 
     server.on("/perros", [](){
-        activarFrecuencia(6000);  // Perros: 6 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(6000);  // Perros: 6 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de perros activada");
     });
 
     server.on("/moscas", [](){
-        activarFrecuencia(8500);  // Moscas: 8.5 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(8500);  // Moscas: 8.5 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de moscas activada");
     });
 
     server.on("/cucarachas", [](){
-        activarFrecuencia(9500);  // Cucarachas: 9.5 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(9500);  // Cucarachas: 9.5 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de cucarachas activada");
     });
 
     server.on("/murcielagos", [](){
-        activarFrecuencia(10000);  // Murciélagos: 10 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(10000);  // Murciélagos: 10 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de murciélagos activada");
     });
 
     server.on("/ratones", [](){
-        activarFrecuencia(7500);  // Ratones: 7.5 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(11000);  // Ratones: 11 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de ratones activada");
     });
 
     server.on("/pulgas", [](){
-        activarFrecuencia(8500);  // Pulgas: 8.5 kHz (ajustado)
-        frecuenciaTicker.attach(8, manejarFrecuencia);  // Alternar cada 8 segundos
+        activarFrecuencia(12000);  // Pulgas: 12 kHz
+        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
         server.send(200, "text/plain", "Frecuencia de pulgas activada");
     });
 
-    // Comienza el servidor
     server.begin();
-    Serial.println("Servidor iniciado.");
+    Serial.println("Servidor HTTP iniciado");
 }
 
 void loop() {
-    server.handleClient();  // Manejo de clientes del servidor
+    server.handleClient();
 }
