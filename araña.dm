@@ -109,7 +109,7 @@
 			//30% chance to stop wandering and do something
 			if(!busy && prob(30))
 				//first, check for potential food nearby to cocoon
-				for(var/mob/living/carbon/human/C in can_see)
+				for(var/mob/living/carbon/C in can_see)
 					if(C.stat)
 						cocoon_target = C
 						busy = MOVING_TO_TARGET
