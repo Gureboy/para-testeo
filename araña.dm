@@ -15,7 +15,8 @@
 	emote_hear = list("chitters")
 	speak_chance = 5
 	turns_per_move = 5
-	see_in_dark = 10
+	see_in_dark = 70
+	break_stuff_probability = 100
 	meat_type = /obj/item/reagent_container/food/snacks/bearmeat
 	response_help  = "pets the"
 	response_disarm = "gently pushes aside the"
