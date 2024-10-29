@@ -7,7 +7,7 @@
 //basic spider mob, these generally guard nests
 /mob/living/simple_animal/hostile/giant_spider
 	name = "giant spider"
-	desc = "Furry and black, it makes you shudder to look at it. This one has deep red eyes."
+	desc = "Furry and black, it makes you shudder to look at it has medium sized fangs dripping corrosive liquid, this one looks bigger and has deep red eyes."
 	icon_state = "guard"
 	icon_living = "guard"
 	icon_dead = "guard_dead"
@@ -22,8 +22,8 @@
 	response_disarm = "gently pushes aside the"
 	response_harm   = "pokes the"
 	stop_automated_movement_when_pulled = 0
-	maxHealth = 200
-	health = 200
+	maxHealth = 250
+	health = 250
 	melee_damage_lower = 15
 	melee_damage_upper = 20
 	heat_damage_per_tick = 20
@@ -37,12 +37,12 @@
 
 //nursemaids - these create webs and eggs
 /mob/living/simple_animal/hostile/giant_spider/nurse
-	desc = "Furry and black, it makes you shudder to look at it. This one has brilliant green eyes."
+	desc = "Furry and black, it makes you shudder to look at it has small fangs dripping a sickling looking liquid, this one has brilliant green eyes."
 	icon_state = "nurse"
 	icon_living = "nurse"
 	icon_dead = "nurse_dead"
-	maxHealth = 40
-	health = 40
+	maxHealth = 100
+	health = 100
 	melee_damage_lower = 5
 	melee_damage_upper = 10
 	poison_per_bite = 10
@@ -52,7 +52,7 @@
 
 //hunters have the most poison and move the fastest, so they can find prey
 /mob/living/simple_animal/hostile/giant_spider/hunter
-	desc = "Furry and black, it makes you shudder to look at it. This one has sparkling purple eyes."
+	desc = "Furry and black, it makes you shudder to look at it has protuding big fangs dripping corrosive liquid, this one has sparkling purple eyes."
 	icon_state = "hunter"
 	icon_living = "hunter"
 	icon_dead = "hunter_dead"
@@ -73,7 +73,7 @@
 	if(isliving(target_mob))
 		var/mob/living/L = target_mob
 		if(L.reagents)
-			L.reagents.add_reagent("toxin", poison_per_bite)
+			L.reagents.add_reagent("toxin", "iota", poison_per_bite)
 			if(prob(poison_per_bite))
 				to_chat(L, SPAN_DANGER("You feel a tiny prick."))
 				L.reagents.add_reagent(poison_type, 5)
