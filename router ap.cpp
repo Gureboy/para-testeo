@@ -2,7 +2,7 @@
 #include <ESP8266WebServer.h>
 
 // Configuración del punto de acceso
-const char* ssid = "ESP8266_Router";      // Nombre de la red WiFi (SSID)
+const char* ssid = "ControlPlaga Router";      // Nombre de la red WiFi (SSID)
 const char* password = "12345678";         // Contraseña de la red (mínimo 8 caracteres)
 IPAddress local_IP(192, 168, 4, 1);        // IP fija del AP
 IPAddress gateway(192, 168, 4, 1);         // Puerta de enlace
