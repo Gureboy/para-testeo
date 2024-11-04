@@ -19,3 +19,94 @@ fastparquet
 flask
 fastapi
 uvicorn
+# Librerías Básicas
+numpy
+pandas
+matplotlib
+
+# Preprocesamiento de Datos y Machine Learning
+scikit-learn
+xgboost
+lightgbm
+catboost
+tpot
+pycaret
+
+# Procesamiento de Lenguaje Natural (NLP) y Modelos de Lenguaje Avanzado
+nltk
+spacy
+transformers
+sentence-transformers
+flair
+stanza
+textblob
+gensim
+
+# Redes Neuronales y Deep Learning Avanzado
+tensorflow
+keras
+torch
+torchvision
+timm
+deepspeed
+pytorch-lightning
+accelerate
+allennlp
+
+# Optimización de Hiperparámetros y AutoML
+optuna
+hyperopt
+ray[tune]
+auto-sklearn
+bayesian-optimization
+
+# Interpretabilidad de Modelos
+shap
+lime
+captum
+
+# Redes Neuronales de Grafos
+torch-geometric
+dgl
+networkx
+pygraphviz
+
+# Procesamiento de Audio y Video
+librosa
+torchaudio
+moviepy
+
+# Aprendizaje por Refuerzo (RL)
+gym[all]
+stable-baselines3
+ray[rllib]
+tianshou
+
+# Computación Distribuida y Acelerada
+horovod
+dask
+pyarrow
+fastparquet
+
+# Despliegue de Modelos y API
+flask
+fastapi
+uvicorn
+mlflow
+seldon-core
+bentoml
+
+# Manejo y Optimización de Modelos
+onnx
+onnxruntime
+tensorflow-serving-api
+nvidia-pyindex
+tritonclient[all]  # Cliente para Triton Inference Server
+
+# Otras Librerías Avanzadas
+faiss-cpu
+scipy
+
+# Visualización y Análisis
+seaborn
+plotly
