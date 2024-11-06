@@ -76,7 +76,7 @@
 			L.reagents.add_reagent("toxin", "iota", poison_per_bite)
 			if(prob(poison_per_bite))
 				to_chat(L, SPAN_DANGER("You feel a tiny prick."))
-				L.reagents.add_reagent(poison_type, 5)
+				L.reagents.add_reagent(poison_type, 10)
 
 /mob/living/simple_animal/hostile/giant_spider/Life(delta_time)
 	..()
