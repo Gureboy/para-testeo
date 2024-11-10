@@ -77,10 +77,7 @@ const char index_html[] PROGMEM = R"rawliteral(
           <h1 class="m-0 text-dark text-center">Control de Plagas y Animales</h1>
           <div class="btn-container">
             <div>
-              <label class="btn">🦟 Mosquitos
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/mosquitos', this)">
-              </label>
-            </div>
+              
             <div>
               <label class="btn">🕊️ Palomas
                 <input type="checkbox" class="slider" onchange="toggleFrequency('/palomas', this)">
