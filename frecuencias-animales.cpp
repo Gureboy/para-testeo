@@ -87,46 +87,7 @@ const char index_html[] PROGMEM = R"rawliteral(
               </label>
             </div>
             <div>
-              <label class="btn">🦋 Polillas
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/polillas', this)">
-              </label>
-            </div>
-            <div>
-              <label class="btn">🐱 Gatos
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/gatos', this)">
-              </label>
-            </div>
-            <div>
-              <label class="btn">🐶 Perros
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/perros', this)">
-              </label>
-            </div>
-            <div>
-              <label class="btn">🪰 Moscas
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/moscas', this)">
-              </label>
-            </div>
-            <div>
-              <label class="btn">🪳 Cucarachas
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/cucarachas', this)">
-              </label>
-            </div>
-            <div>
-              <label class="btn">🦇 Murciélagos
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/murcielagos', this)">
-              </label>
-            </div>
-            <div>
-              <label class="btn">🐭 Ratones
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/ratones', this)">
-              </label>
-            </div>
-            <div>
-              <label class="btn">🦗 Pulgas
-                <input type="checkbox" class="slider" onchange="toggleFrequency('/pulgas', this)">
-              </label>
-            </div>
-          </div>
+              
         </div>
       </div>
     </div>
@@ -165,11 +126,7 @@ void setupServer() {
     });
 
     // Rutas para cada animal/plaga
-    server.on("/mosquitos", []() {
-        activarFrecuencia(10000);  // Mosquitos: 10 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de mosquitos activada");
-    });
+    
 
     server.on("/palomas", []() {
         activarFrecuencia(8000);  // Palomas: 8 kHz
@@ -177,53 +134,6 @@ void setupServer() {
         server.send(200, "text/plain", "Frecuencia de palomas activada");
     });
 
-    server.on("/polillas", []() {
-        activarFrecuencia(9000);  // Polillas: 9 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de polillas activada");
-    });
-
-    server.on("/gatos", []() {
-        activarFrecuencia(7000);  // Gatos: 7 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de gatos activada");
-    });
-
-    server.on("/perros", []() {
-        activarFrecuencia(6000);  // Perros: 6 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de perros activada");
-    });
-
-    server.on("/moscas", []() {
-        activarFrecuencia(8500);  // Moscas: 8.5 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de moscas activada");
-    });
-
-    server.on("/cucarachas", []() {
-        activarFrecuencia(9500);  // Cucarachas: 9.5 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de cucarachas activada");
-    });
-
-    server.on("/murcielagos", []() {
-        activarFrecuencia(11000);  // Murciélagos: 11 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de murciélagos activada");
-    });
-
-    server.on("/ratones", []() {
-        activarFrecuencia(12000);  // Ratones: 12 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de ratones activada");
-    });
-
-    server.on("/pulgas", []() {
-        activarFrecuencia(13000);  // Pulgas: 13 kHz
-        frecuenciaTicker.attach(8.3, manejarFrecuencia);  // Alternar cada 8.3 segundos
-        server.send(200, "text/plain", "Frecuencia de pulgas activada");
-    });
 
     server.begin();
     Serial.println("Servidor web iniciado en la IP: " + WiFi.localIP().toString());
