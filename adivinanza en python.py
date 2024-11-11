@@ -1,13 +1,13 @@
 import random
 
 def adivina_el_numero():
-    print("¡Bienvenido al juego de 'Adivina el Número'!")
+    print("Bienvenido al juego de 'Adivina el Número'")
     print("Estoy pensando en un número entre 1 y 100.")
     
     numero_secreto = random.randint(1, 100)
     intentos = 10  # Número de intentos permitidos
     
-    # Bucle para que el usuario intente adivinar el número
+    # Comando de adivinanza
     while intentos > 0:
         try:
             adivinanza = int(input(f"Tienes {intentos} intentos restantes. Ingresa tu número: "))
@@ -31,6 +31,6 @@ def adivina_el_numero():
     if intentos == 0:
         print(f"Lo siento, se te acabaron los intentos. El número secreto era {numero_secreto}. ¡Mejor suerte la próxima vez!")
 
-# Ejecutar el juego
+# Empieza el juego
 if __name__ == "__main__":
     adivina_el_numero()
