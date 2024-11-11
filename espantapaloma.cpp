@@ -39,62 +39,121 @@ const char index_html[] PROGMEM = R"rawliteral(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Control de Plagas</title>
+  <!-- AdminLTE CSS -->
   <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="https://adminlte.io/themes/v3/dist/css/adminlte.min.css">
   <style>
     body {
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f4f6f9;
+      background-color: #2f2f2f; /* Fondo gris metálico oscuro */
+      color: #f8f9fa; /* Texto en color blanco */
+      font-family: 'Source Sans Pro', sans-serif;
+      margin: 0;
     }
-    .btn-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
+    .card {
+      background: #3d3d3d;
+      border-radius: 15px;
+      padding: 40px;
+      width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      text-align: center;
     }
-    .btn {
-      margin: 10px;
-      padding: 15px;
-      font-size: 18px;
-      border-radius: 8px;
-      color: white;
-      background-color: #007bff;
-      cursor: pointer;
-      transition: background-color 0.3s;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #e1e1e1;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
     }
-    .btn:hover {
-      background-color: #0056b3;
-    }
-    .btn-apagar {
-      background-color: #dc3545;
-    }
-    .btn-apagar:hover {
-      background-color: #c82333;
-    }
-    .switch-label {
+    .toggle-container {
       display: flex;
       align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
       cursor: pointer;
-      font-size: 20px;
-      margin-bottom: 20px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #6c757d;
+      transition: .4s;
+      border-radius: 30px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #20c997;
+    }
+    input:checked + .slider:before {
+      transform: translateX(28px);
+    }
+    .btn-apagar {
+      background: linear-gradient(135deg, #e83e8c, #c82353);
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 30px;
+      width: 100%;
+    }
+    .btn-apagar:hover {
+      background: linear-gradient(135deg, #c82353, #bd2130);
+      transform: translateY(-2px);
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: #adb5bd;
     }
   </style>
 </head>
 <body>
-  <h1>Control de Plagas</h1>
-  <div class="btn-container">
-    <label class="switch-label">
+  <div class="card">
+    <h1>Control de Plagas 🦟</h1>
+    <div class="toggle-container">
       🕊️ Palomas
-      <input type="checkbox" id="palomasCheckbox" onchange="toggleFrequency('/palomas', this)">
-    </label>
-    <button class="btn btn-apagar" onclick="apagarFrecuencia()">🔴 Apagar</button>
+      <label class="toggle-switch">
+        <input type="checkbox" id="palomasToggle" onchange="toggleFrequency('/palomas', this)">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <button class="btn-apagar" onclick="apagarFrecuencia()">🔴 Apagar</button>
+    <div class="footer">
+      <i class="fas fa-copyright"></i> 2024 Control de Plagas
+    </div>
   </div>
   <script>
-    function toggleFrequency(url, checkbox) {
+    function toggleFrequency(url, toggle) {
       fetch(url)
         .then(response => response.text())
         .then(data => console.log(data))
@@ -102,8 +161,8 @@ const char index_html[] PROGMEM = R"rawliteral(
     }
 
     function apagarFrecuencia() {
-      const checkbox = document.getElementById('palomasCheckbox');
-      if (checkbox.checked) checkbox.checked = false;
+      const toggle = document.getElementById('palomasToggle');
+      if (toggle.checked) toggle.checked = false;
       fetch('/apagar')
         .then(response => response.text())
         .then(data => console.log(data))
@@ -112,7 +171,8 @@ const char index_html[] PROGMEM = R"rawliteral(
   </script>
 </body>
 </html>
-)rawliteral";
+)rawliteral"
+;
 
 // Configuración del servidor web
 void setupServer() {
