@@ -199,6 +199,14 @@ void setupServer() {
 void setup() {
     Serial.begin(115200);
 
+    // Configurar la IP fija
+    IPAddress ip(192, 168, 10, 164);     // IP fija
+    IPAddress gateway(192, 168, 10, 1);  // Gateway (puerta de enlace)
+    IPAddress subnet(255, 255, 255, 0);  // Máscara de subred
+
+    // Configurar WiFi con IP fija
+    WiFi.config(ip, gateway, subnet);
+
     // Conectar a la red WiFi
     WiFiManager wifiManager;
     wifiManager.autoConnect("ControldePlaga");
