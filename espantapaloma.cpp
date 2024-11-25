@@ -3,23 +3,32 @@
 #include <WiFiManager.h>
 #include <Ticker.h>
 
-const int audioPin = 13; // Pin para el tono
+const int audioPin = 13;  // Pin para el tono
+const int gpioEstado = 4; // Pin GPIO para el indicador de estado
+
 ESP8266WebServer server(80);
 Ticker frecuenciaTicker;
 
 bool frecuenciaActiva = false;
 int frecuenciaActual = 0;
 
+// Configurar el estado del pin GPIO
+void actualizarEstadoGPIO() {
+    digitalWrite(gpioEstado, frecuenciaActiva ? LOW : HIGH);
+}
+
 // Frecuencia para Palomas
 void activarFrecuencia(int frecuencia) {
     frecuenciaActual = frecuencia;
     tone(audioPin, frecuencia);
     frecuenciaActiva = true;
+    actualizarEstadoGPIO();
 }
 
 void detenerFrecuencia() {
     noTone(audioPin);
     frecuenciaActiva = false;
+    actualizarEstadoGPIO();
 }
 
 // Alternar encendido/apagado cada 8.3 segundos
@@ -171,8 +180,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   </script>
 </body>
 </html>
-)rawliteral"
-;
+)rawliteral";
 
 // Configuración del servidor web
 void setupServer() {
@@ -199,17 +207,13 @@ void setupServer() {
 void setup() {
     Serial.begin(115200);
 
-    // Configurar la IP fija
-    IPAddress ip(192, 168, 10, 164);     // IP fija
-    IPAddress gateway(192, 168, 10, 1);  // Gateway (puerta de enlace)
-    IPAddress subnet(255, 255, 255, 0);  // Máscara de subred
+    // Configurar GPIO
+    pinMode(gpioEstado, OUTPUT);
+    actualizarEstadoGPIO(); // Estado inicial
 
-    // Configurar WiFi con IP fija
-    WiFi.config(ip, gateway, subnet);
-
-    // Conectar a la red WiFi
+    // Configurar WiFi
     WiFiManager wifiManager;
-    wifiManager.autoConnect("ControldePlaga");
+    wifiManager.autoConnect("ControlDePlaga");
 
     setupServer();
 }
