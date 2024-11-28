@@ -213,7 +213,7 @@ void setupServer() {
 
     server.on("/test", []() {
         detenerFrecuencia();
-        activarFrecuencia(15000); // Frecuencia de Test: 15 kHz
+        activarFrecuencia(8000); // Frecuencia de Test: 15 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);
         server.send(200, "text/plain", "Frecuencia de prueba activada");
     });
