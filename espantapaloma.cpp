@@ -189,7 +189,7 @@ void setupServer() {
     });
 
     server.on("/palomas", []() {
-        activarFrecuencia(8000); // Frecuencia para Palomas: 8 kHz
+        activarFrecuencia(18000); // Frecuencia para Palomas: 8 kHz
         frecuenciaTicker.attach(8.3, manejarFrecuencia);
         server.send(200, "text/plain", "Frecuencia de palomas activada");
     });
