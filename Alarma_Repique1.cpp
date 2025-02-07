@@ -24,9 +24,9 @@ bool alarmaActivada = false;
 unsigned long ultimaAlerta = 0;
 const unsigned long INTERVALO_ALERTA = 60000;
 bool alarmaSonando = false;
-const unsigned long TIEMPO_SONANDO = 10000; // 10 segundos
+const unsigned long TIEMPO_SONANDO = 10000;
 unsigned long tiempoInicioAlarma = 0;
-const unsigned long TIEMPO_REPIQUE = 500; // Medio segundo
+const unsigned long TIEMPO_REPIQUE = 500;
 
 void tick() {
   digitalWrite(LED_WIFI, !digitalRead(LED_WIFI));
@@ -46,6 +46,7 @@ BLYNK_WRITE(V2) {
   } else {
     activar();
   }
+  Blynk.virtualWrite(V2, alarmaActivada);
 }
 
 void verificarSensores() {
@@ -91,22 +92,29 @@ void verificarWiFi() {
     Serial.println("⚠️ WiFi desconectado. Intentando reconectar...");
     WiFi.reconnect();
   }
-  if (millis() - ultimaAlerta > 300000 && WiFi.status() == WL_CONNECTED) {
-    Serial.println("🛑 No hay actividad. Desactivando WiFi para ahorrar energía...");
-    WiFi.mode(WIFI_OFF);
-  }
 }
 
 void ICACHE_RAM_ATTR cambiarEstadoAlarma() {
   alarmaActivada = !alarmaActivada;
   Serial.println(alarmaActivada ? "🔴 Alarma ACTIVADA" : "🚨 Alarma DESACTIVADA");
-  repiqueSirena();
+  repiqueSirena(alarmaActivada);
+  Blynk.virtualWrite(V2, alarmaActivada);
 }
 
-void repiqueSirena() {
-  digitalWrite(ALARM_PIN, HIGH);
-  delay(TIEMPO_REPIQUE);
-  digitalWrite(ALARM_PIN, LOW);
+void repiqueSirena(bool activacion) {
+  if (activacion) {
+    digitalWrite(ALARM_PIN, HIGH);
+    delay(TIEMPO_REPIQUE);
+    digitalWrite(ALARM_PIN, LOW);
+  } else {
+    digitalWrite(ALARM_PIN, HIGH);
+    delay(TIEMPO_REPIQUE);
+    digitalWrite(ALARM_PIN, LOW);
+    delay(TIEMPO_REPIQUE);
+    digitalWrite(ALARM_PIN, HIGH);
+    delay(TIEMPO_REPIQUE);
+    digitalWrite(ALARM_PIN, LOW);
+  }
 }
 
 void setup() {
@@ -142,12 +150,14 @@ void loop() {
 void activar() {
   alarmaActivada = true;
   Serial.println("🔴 Alarma ACTIVADA");
-  repiqueSirena();
+  repiqueSirena(true);
+  Blynk.virtualWrite(V2, alarmaActivada);
 }
 
 void desactivar() {
   alarmaActivada = false;
   desactivarAlarma();
   Serial.println("🚨 Alarma DESACTIVADA");
-  repiqueSirena();
+  repiqueSirena(false);
+  Blynk.virtualWrite(V2, alarmaActivada);
 }
