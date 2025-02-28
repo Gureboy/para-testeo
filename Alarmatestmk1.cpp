@@ -15,22 +15,25 @@ Ticker ticker;
 WiFiManager wm;
 BlynkTimer timer;
 
-#define ALARM_PIN D7
-#define PIN_ACTIVAR D1
-#define SENSOR_PIN D2
-#define LED_WIFI D6
+#define ALARM_PIN D7          // Pin donde está conectada la alarma
+#define PIN_ACTIVAR D1        // Botón de activación
+#define SENSOR_PIN D2         // Pin del sensor de movimiento
+#define LED_WIFI D6           // LED indicador de conexión WiFi
 
 bool alarmaActivada = false;
 unsigned long ultimaAlerta = 0;
-const unsigned long INTERVALO_ALERTA = 60000;
+const unsigned long INTERVALO_ALERTA = 60000; // Intervalo de 1 minuto para evitar notificaciones repetidas
 bool alarmaSonando = false;
 const unsigned long TIEMPO_SONANDO = 10000;
 unsigned long tiempoInicioAlarma = 0;
 const unsigned long TIEMPO_REPIQUE = 500;
 bool mensajeInicialEnviado = false;
+bool alertaEnviada = false; // Flag para controlar notificaciones
+unsigned long ultimaReconexion = 0;
+const unsigned long INTERVALO_RECONEXION = 30000; // Evita intentos de reconexión seguidos
 
 void tick() {
-  digitalWrite(LED_WIFI, !digitalRead(LED_WIFI));
+  digitalWrite(LED_WIFI, !digitalRead(LED_WIFI)); // Parpadeo del LED cuando está en modo configuración
 }
 
 void configModeCallback(WiFiManager *myWiFiManager) {
@@ -52,11 +55,14 @@ BLYNK_WRITE(V2) {
 
 void verificarSensores() {
   int sensorEstado = digitalRead(SENSOR_PIN);
+  // Verifica si la alarma está activada y si el sensor detecta movimiento
   if (alarmaActivada && sensorEstado == HIGH && !alarmaSonando && millis() - ultimaAlerta > INTERVALO_ALERTA) {
     Serial.println("⚠️ ALERTA: Movimiento detectado!");
     activarAlarma();
     ultimaAlerta = millis();
+    alertaEnviada = true; // Se marca que la alerta ya fue enviada
   }
+  // Verifica si ya pasó el tiempo de duración de la alarma
   if (alarmaSonando && millis() - tiempoInicioAlarma > TIEMPO_SONANDO) {
     desactivarAlarma();
   }
@@ -75,10 +81,11 @@ void desactivarAlarma() {
   alarmaSonando = false;
   digitalWrite(ALARM_PIN, LOW);
   Serial.println("🚨 Alarma DESACTIVADA");
+  alertaEnviada = false; // Resetea el flag para futuras alertas
 }
 
 void reconectarBlynk() {
-  if (!Blynk.connected()) {
+  if (!Blynk.connected() && millis() - ultimaReconexion > INTERVALO_RECONEXION) {
     Serial.println("⚠️ Blynk desconectado. Intentando reconectar...");
     if (Blynk.connect()) {
       Serial.println("✅ Reconexion exitosa!");
@@ -88,6 +95,7 @@ void reconectarBlynk() {
     } else {
       Serial.println("❌ Fallo en la reconexión");
     }
+    ultimaReconexion = millis();
   }
 }
 
@@ -140,8 +148,7 @@ void setup() {
   
   Serial.println("✅ Conectado a WiFi!");
   Blynk.begin(BLYNK_AUTH_TOKEN, WiFi.SSID().c_str(), WiFi.psk().c_str());
-  
-  mensajeInicialEnviado = true;  // Evita que el mensaje se repita tras la conexión inicial
+  mensajeInicialEnviado = true;
 
   timer.setInterval(1000L, verificarSensores);
   timer.setInterval(30000L, verificarWiFi);
@@ -170,3 +177,4 @@ void desactivar() {
   repiqueSirena(false);
   Blynk.virtualWrite(V2, alarmaActivada);
 }
+
