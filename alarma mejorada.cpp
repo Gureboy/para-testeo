@@ -22,9 +22,9 @@ BlynkTimer timer;
 
 bool alarmaActivada = false;
 unsigned long ultimaAlerta = 0;
-const unsigned long INTERVALO_ALERTA = 60000;
+const unsigned long INTERVALO_ALERTA = 5000; // Reducido a 5 segundos
 bool alarmaSonando = false;
-const unsigned long TIEMPO_SONANDO = 10000; // 10 segundos
+const unsigned long TIEMPO_SONANDO = 60000; // 1 minuto
 unsigned long tiempoInicioAlarma = 0;
 
 void tick() {
@@ -71,6 +71,7 @@ void activarAlarma() {
 void desactivarAlarma() {
   alarmaSonando = false;
   digitalWrite(ALARM_PIN, LOW);
+  ultimaAlerta = millis(); // Reseteamos para permitir una nueva activación inmediata
   Serial.println("🚨 Alarma DESACTIVADA");
 }
 
